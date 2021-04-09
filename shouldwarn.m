@@ -35,7 +35,7 @@ warning(state)
 [msg,warnID] = lastwarn;
 if isempty(msg) && isempty(warnID)
     % No warning was thrown.
-    error('This should have thrown a warning.')
+    error('AlertChecking:ShouldWarn','This should have thrown a warning.')
 end
 
 

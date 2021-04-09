@@ -24,6 +24,6 @@ catch ME
     varargout = [{ME} cell(1,nargout-1)];
     return
 end
-error('This should have thrown an error.')
+error('AlertChecking:ShouldError','This should have thrown an error.')
 
 end

@@ -31,7 +31,7 @@ catch
     [msg,warnID] = lastwarn;
     if isempty(msg) && isempty(warnID)
         % Also failed to warn.
-        error('This should have thrown an alert.')
+        error('AlertChecking:ShouldAlert','This should have thrown an alert.')
     end
     
 end
