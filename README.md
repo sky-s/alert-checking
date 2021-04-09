@@ -1,3 +1,5 @@
+[![View Alert Checking on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/90022-alert-checking)
+
 # Alert Checking
 
 Check Matlab code that is supposed to throw errors or warnings.
