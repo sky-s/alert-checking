@@ -2,8 +2,10 @@ function varargout = shouldalert(varargin)
 % shouldalert  Throws an error if input executes successfully without warnings
 % or errors. Useful for test scripts.
 % 
-%   Inputs are same as for feval, unless only one char or string input is
-%   provided, in which case eval is used.
+%   Inputs and outputs are the same as for feval or, if only one char or string
+%   input is provided, evalin('caller',...).
+% 
+%   Use caution regarding the input's expectations regarding number of outputs.
 % 
 %   See also shouldwarn, shoulderror.
 
@@ -21,20 +23,29 @@ state = warning('query').state;
 warning off
 
 % Run code
+warned = false;
+errored = false;
+
 try
-    [varargout{1:nargout}] = shoulderror(varargin{:});
-catch
-    % Failed to error.
-    
-    warning(state) % Reset warning state.
-    
-    [msg,warnID] = lastwarn;
-    if isempty(msg) && isempty(warnID)
-        % Also failed to warn.
-        error('AlertChecking:ShouldAlert','This should have thrown an alert.')
+    if nargin == 1 && (ischar(varargin{1}) || isstring(varargin{1}))
+        [varargout{1:nargout}] = evalin('caller',varargin{1}); %#ok<*NASGU>
+    else
+        [varargout{1:nargout}] = feval(varargin{:});
     end
     
+catch ME
+    errored = true;
 end
 
-clear varargout
+warning(state) % Reset warning state.
+
+[msg,warnID] = lastwarn;
+if ~(isempty(msg) && isempty(warnID))
+    % Warning was issued.
+    warned = true;
+end
+
+if ~warned && ~errored
+    error('AlertChecking:ShouldAlert','This should have thrown an alert.')
+end
 
